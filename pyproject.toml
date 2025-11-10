@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
-    {name = "Max to Telegram Bridge Contributors"},
+    {name = "Max ↔ Telegram Bridge Contributors"},
 ]
 keywords = ["telegram", "max", "messenger", "bridge", "webhook", "green-api"]
 classifiers = [
