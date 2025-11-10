@@ -24,29 +24,24 @@ class GreenApiClient:
 
     def _format_chat_id(self, chat_id: str) -> str:
         """
-        Format chat ID for GREEN-API.
-        Groups (negative IDs) are sent as-is without suffix.
-        Personal chats need @c.us suffix.
+        Format chat ID for GREEN-API (Max messenger).
+        Max uses numeric chat IDs without suffixes.
+
+        Groups: negative IDs (e.g., -69020002426896)
+        Personal chats: positive IDs (e.g., 16958332)
 
         Args:
-            chat_id: Phone number or chat ID
+            chat_id: Chat ID (numeric) or with accidentally added suffix
 
         Returns:
-            str: Formatted chat ID (e.g., 79991234567@c.us or -69021489804697)
+            str: Clean numeric chat ID (e.g., -69020002426896 or 16958332)
         """
-        # Remove any existing suffix
+        # Remove any accidentally added WhatsApp-style suffixes
+        # (Max doesn't use them, but users might add them by mistake)
         chat_id = chat_id.replace("@c.us", "").replace("@g.us", "")
 
-        # If starts with minus - it's a group, send as is (no suffix)
-        if chat_id.startswith("-"):
-            return chat_id
-
-        # If already has @c.us suffix, return as is
-        if chat_id.endswith("@c.us"):
-            return chat_id
-
-        # Otherwise - personal chat needs @c.us suffix
-        return f"{chat_id}@c.us"
+        # Return clean numeric ID
+        return chat_id
 
     async def send_text_message(
         self,

@@ -13,6 +13,26 @@
 - Поддержка групповых чатов
 - Кэширование медиафайлов
 
+## [1.1.1] - 2025-01-10
+
+### Исправлено
+
+- **Исправлен формат chatId для Max messenger**
+  - Убрана неправильная логика добавления суффикса `@c.us` к chatId
+  - Max использует числовые chatId без суффиксов:
+    - Личные чаты: положительные числа (например, `16958332`)
+    - Групповые чаты: отрицательные числа (например, `-69020002426896`)
+  - Метод `_format_chat_id` теперь только очищает случайно добавленные суффиксы
+
+### Изменено
+
+- Обновлена документация с правильным форматом chatId:
+  - `.env.example`: примеры с числовыми chatId
+  - `README.md`: инструкция как получить chatId через GREEN-API метод GetChats
+  - `CLAUDE.md`: правильные примеры и пояснения
+- Примеры `MAX_TARGET_CHAT_ID` изменены с `79991234567@c.us` на `-69020002426896`
+- Добавлена инструкция получения chatId через API
+
 ## [1.1.0] - 2025-01-10
 
 ### ⚠️ Breaking Changes
@@ -124,6 +144,7 @@ python-dotenv==1.0.1
 - `Исправлено` - исправления багов
 - `Безопасность` - исправления уязвимостей
 
-[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/noshackleshot/telegram-max-bridge/releases/tag/v1.0.0
