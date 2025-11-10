@@ -195,19 +195,13 @@ class TelegramClient:
         Args:
             text: Original message text
             sender_name: Sender name
-            sender_phone: Sender phone
+            sender_phone: Sender phone (not used, kept for compatibility)
 
         Returns:
             str: Formatted message
         """
-        sender_info = []
         if sender_name:
-            sender_info.append(f"👤 <b>{sender_name}</b>")
-        if sender_phone:
-            sender_info.append(f"📱 <code>{sender_phone}</code>")
-
-        if sender_info:
-            header = " | ".join(sender_info)
+            header = f"👤 <b>{sender_name}</b>"
             return f"{header}\n\n{text}"
         return text
 
