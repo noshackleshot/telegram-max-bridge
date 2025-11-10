@@ -1,6 +1,7 @@
 """
 Webhook handlers for processing incoming messages from GREEN-API (Max).
 """
+
 import logging
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
@@ -14,6 +15,7 @@ logger = logging.getLogger(__name__)
 # Pydantic models for GREEN-API webhook payloads
 class MessageData(BaseModel):
     """Message data from GREEN-API webhook."""
+
     typeWebhook: str
     instanceData: Optional[Dict[str, Any]] = None
     timestamp: Optional[int] = None
@@ -63,7 +65,12 @@ class WebhookHandler:
             logger.info(f"Received webhook type: {webhook_type}")
 
             # We're interested in incoming and outgoing message notifications
-            if webhook_type not in ["incomingMessageReceived", "incomingCall", "outgoingMessageReceived", "outgoingAPIMessageReceived"]:
+            if webhook_type not in [
+                "incomingMessageReceived",
+                "incomingCall",
+                "outgoingMessageReceived",
+                "outgoingAPIMessageReceived",
+            ]:
                 logger.debug(f"Ignoring webhook type: {webhook_type}")
                 return {"status": "ignored", "reason": "not_a_message"}
 
@@ -115,10 +122,7 @@ class WebhookHandler:
             return {"status": "error", "message": str(e)}
 
     async def _handle_text_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle text message."""
         text = message_data.get("textMessageData", {}).get("textMessage", "")
@@ -126,10 +130,7 @@ class WebhookHandler:
             await telegram_client.send_text_message(text, sender_name, sender_phone)
 
     async def _handle_extended_text_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle extended text message (outgoing messages from GREEN-API)."""
         text = message_data.get("extendedTextMessageData", {}).get("text", "")
@@ -137,10 +138,7 @@ class WebhookHandler:
             await telegram_client.send_text_message(text, sender_name, sender_phone)
 
     async def _handle_image_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle image message."""
         image_data = message_data.get("fileMessageData") or message_data.get("downloadUrl")
@@ -155,10 +153,7 @@ class WebhookHandler:
             await telegram_client.send_photo(image_url, caption, sender_name, sender_phone)
 
     async def _handle_video_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle video message."""
         video_data = message_data.get("fileMessageData") or message_data.get("downloadUrl")
@@ -173,10 +168,7 @@ class WebhookHandler:
             await telegram_client.send_video(video_url, caption, sender_name, sender_phone)
 
     async def _handle_document_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle document message."""
         doc_data = message_data.get("fileMessageData") or {}
@@ -190,10 +182,7 @@ class WebhookHandler:
             )
 
     async def _handle_audio_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle audio message (treat as document)."""
         audio_data = message_data.get("fileMessageData") or {}
@@ -206,10 +195,7 @@ class WebhookHandler:
             )
 
     async def _handle_voice_message(
-        self,
-        message_data: Dict[str, Any],
-        sender_name: Optional[str],
-        sender_phone: Optional[str]
+        self, message_data: Dict[str, Any], sender_name: Optional[str], sender_phone: Optional[str]
     ):
         """Handle voice message (treat as document)."""
         voice_data = message_data.get("fileMessageData") or {}

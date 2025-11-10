@@ -2,6 +2,7 @@
 GREEN-API client for sending messages to Max messenger.
 Uses GREEN-API REST endpoints for async operations.
 """
+
 import logging
 from typing import Optional
 import aiohttp
@@ -20,7 +21,9 @@ class GreenApiClient:
         # Extract server ID from instance ID (first 4 digits)
         server_id = str(self.instance_id)[:4]
         self.base_url = f"https://{server_id}.api.green-api.com/v3/waInstance{self.instance_id}"
-        logger.info(f"GREEN-API client initialized for instance: {self.instance_id} (server: {server_id})")
+        logger.info(
+            f"GREEN-API client initialized for instance: {self.instance_id} (server: {server_id})"
+        )
 
     def _format_chat_id(self, chat_id: str) -> str:
         """
@@ -48,7 +51,7 @@ class GreenApiClient:
         chat_id: str,
         text: str,
         sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        sender_username: Optional[str] = None,
     ) -> bool:
         """
         Send text message to Max chat.
@@ -71,21 +74,22 @@ class GreenApiClient:
 
             # Prepare API request
             url = f"{self.base_url}/sendMessage/{self.api_token}"
-            payload = {
-                "chatId": formatted_chat_id,
-                "message": formatted_message
-            }
+            payload = {"chatId": formatted_chat_id, "message": formatted_message}
 
             # Send request
             async with aiohttp.ClientSession() as session:
                 async with session.post(url, json=payload) as response:
                     if response.status == 200:
                         result = await response.json()
-                        logger.info(f"Text message sent to Max: {text[:50]}... (ID: {result.get('idMessage')})")
+                        logger.info(
+                            f"Text message sent to Max: {text[:50]}... (ID: {result.get('idMessage')})"
+                        )
                         return True
                     else:
                         error_text = await response.text()
-                        logger.error(f"Failed to send text to Max. Status: {response.status}, Error: {error_text}")
+                        logger.error(
+                            f"Failed to send text to Max. Status: {response.status}, Error: {error_text}"
+                        )
                         return False
 
         except Exception as e:
@@ -99,7 +103,7 @@ class GreenApiClient:
         filename: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        sender_username: Optional[str] = None,
     ) -> bool:
         """
         Send file (photo, video, document) to Max chat by URL.
@@ -121,9 +125,7 @@ class GreenApiClient:
 
             # Format caption with sender info
             formatted_caption = self._format_message(
-                caption or f"📎 {filename}",
-                sender_name,
-                sender_username
+                caption or f"📎 {filename}", sender_name, sender_username
             )
 
             # Prepare API request
@@ -132,7 +134,7 @@ class GreenApiClient:
                 "chatId": formatted_chat_id,
                 "urlFile": file_url,
                 "fileName": filename,
-                "caption": formatted_caption
+                "caption": formatted_caption,
             }
 
             # Send request
@@ -144,7 +146,9 @@ class GreenApiClient:
                         return True
                     else:
                         error_text = await response.text()
-                        logger.error(f"Failed to send file to Max. Status: {response.status}, Error: {error_text}")
+                        logger.error(
+                            f"Failed to send file to Max. Status: {response.status}, Error: {error_text}"
+                        )
                         return False
 
         except Exception as e:
@@ -157,7 +161,7 @@ class GreenApiClient:
         photo_url: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        sender_username: Optional[str] = None,
     ) -> bool:
         """
         Send photo to Max chat.
@@ -173,12 +177,7 @@ class GreenApiClient:
             bool: True if photo sent successfully
         """
         return await self.send_file_by_url(
-            chat_id,
-            photo_url,
-            "photo.jpg",
-            caption or "📷 Photo",
-            sender_name,
-            sender_username
+            chat_id, photo_url, "photo.jpg", caption or "📷 Photo", sender_name, sender_username
         )
 
     async def send_video(
@@ -187,7 +186,7 @@ class GreenApiClient:
         video_url: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        sender_username: Optional[str] = None,
     ) -> bool:
         """
         Send video to Max chat.
@@ -203,12 +202,7 @@ class GreenApiClient:
             bool: True if video sent successfully
         """
         return await self.send_file_by_url(
-            chat_id,
-            video_url,
-            "video.mp4",
-            caption or "🎥 Video",
-            sender_name,
-            sender_username
+            chat_id, video_url, "video.mp4", caption or "🎥 Video", sender_name, sender_username
         )
 
     async def send_document(
@@ -218,7 +212,7 @@ class GreenApiClient:
         filename: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        sender_username: Optional[str] = None,
     ) -> bool:
         """
         Send document to Max chat.
@@ -240,14 +234,11 @@ class GreenApiClient:
             filename,
             caption or f"📄 {filename}",
             sender_name,
-            sender_username
+            sender_username,
         )
 
     def _format_message(
-        self,
-        text: str,
-        sender_name: Optional[str] = None,
-        sender_username: Optional[str] = None
+        self, text: str, sender_name: Optional[str] = None, sender_username: Optional[str] = None
     ) -> str:
         """
         Format message with sender information.

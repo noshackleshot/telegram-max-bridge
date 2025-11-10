@@ -2,6 +2,7 @@
 Telegram client for sending messages to Telegram channel.
 Uses aiogram for async operations.
 """
+
 import logging
 import os
 import tempfile
@@ -27,10 +28,7 @@ class TelegramClient:
         logger.info(f"Telegram client initialized for channel: {self.channel_id}")
 
     async def send_text_message(
-        self,
-        text: str,
-        sender_name: Optional[str] = None,
-        sender_phone: Optional[str] = None
+        self, text: str, sender_name: Optional[str] = None, sender_phone: Optional[str] = None
     ) -> bool:
         """
         Send text message to Telegram channel.
@@ -48,9 +46,7 @@ class TelegramClient:
             formatted_message = self._format_message(text, sender_name, sender_phone)
 
             await self.bot.send_message(
-                chat_id=self.channel_id,
-                text=formatted_message,
-                parse_mode="HTML"
+                chat_id=self.channel_id, text=formatted_message, parse_mode="HTML"
             )
             logger.info(f"Text message sent to Telegram: {text[:50]}...")
             return True
@@ -64,7 +60,7 @@ class TelegramClient:
         photo_url: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_phone: Optional[str] = None
+        sender_phone: Optional[str] = None,
     ) -> bool:
         """
         Send photo to Telegram channel.
@@ -80,9 +76,7 @@ class TelegramClient:
         """
         try:
             formatted_caption = self._format_message(
-                caption or "📷 Photo",
-                sender_name,
-                sender_phone
+                caption or "📷 Photo", sender_name, sender_phone
             )
 
             # Download photo and send
@@ -93,7 +87,7 @@ class TelegramClient:
                     chat_id=self.channel_id,
                     photo=photo,
                     caption=formatted_caption,
-                    parse_mode="HTML"
+                    parse_mode="HTML",
                 )
                 os.unlink(temp_file)  # Clean up temp file
                 logger.info(f"Photo sent to Telegram: {photo_url[:50]}...")
@@ -110,7 +104,7 @@ class TelegramClient:
         filename: Optional[str] = None,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_phone: Optional[str] = None
+        sender_phone: Optional[str] = None,
     ) -> bool:
         """
         Send document to Telegram channel.
@@ -127,9 +121,7 @@ class TelegramClient:
         """
         try:
             formatted_caption = self._format_message(
-                caption or f"📄 {filename or 'Document'}",
-                sender_name,
-                sender_phone
+                caption or f"📄 {filename or 'Document'}", sender_name, sender_phone
             )
 
             # Download document and send
@@ -140,7 +132,7 @@ class TelegramClient:
                     chat_id=self.channel_id,
                     document=document,
                     caption=formatted_caption,
-                    parse_mode="HTML"
+                    parse_mode="HTML",
                 )
                 os.unlink(temp_file)  # Clean up temp file
                 logger.info(f"Document sent to Telegram: {filename}")
@@ -156,7 +148,7 @@ class TelegramClient:
         video_url: str,
         caption: Optional[str] = None,
         sender_name: Optional[str] = None,
-        sender_phone: Optional[str] = None
+        sender_phone: Optional[str] = None,
     ) -> bool:
         """
         Send video to Telegram channel.
@@ -172,9 +164,7 @@ class TelegramClient:
         """
         try:
             formatted_caption = self._format_message(
-                caption or "🎥 Video",
-                sender_name,
-                sender_phone
+                caption or "🎥 Video", sender_name, sender_phone
             )
 
             # Download video and send
@@ -185,7 +175,7 @@ class TelegramClient:
                     chat_id=self.channel_id,
                     video=video,
                     caption=formatted_caption,
-                    parse_mode="HTML"
+                    parse_mode="HTML",
                 )
                 os.unlink(temp_file)  # Clean up temp file
                 logger.info(f"Video sent to Telegram: {video_url[:50]}...")
@@ -197,10 +187,7 @@ class TelegramClient:
             return False
 
     def _format_message(
-        self,
-        text: str,
-        sender_name: Optional[str] = None,
-        sender_phone: Optional[str] = None
+        self, text: str, sender_name: Optional[str] = None, sender_phone: Optional[str] = None
     ) -> str:
         """
         Format message with sender information.

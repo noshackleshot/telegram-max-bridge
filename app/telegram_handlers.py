@@ -2,6 +2,7 @@
 Telegram webhook handlers for processing incoming messages.
 Receives messages from Telegram and forwards to Max via GREEN-API.
 """
+
 import logging
 from typing import Dict, Any, Optional, List
 from aiogram import Bot, Dispatcher
@@ -41,37 +42,32 @@ class TelegramWebhookHandler:
         # Text messages
         self.dispatcher.message.register(
             self._handle_text_message,
-            lambda message: message.text and not message.text.startswith('/')
+            lambda message: message.text and not message.text.startswith("/"),
         )
 
         # Photos
         self.dispatcher.message.register(
-            self._handle_photo_message,
-            lambda message: message.photo is not None
+            self._handle_photo_message, lambda message: message.photo is not None
         )
 
         # Videos
         self.dispatcher.message.register(
-            self._handle_video_message,
-            lambda message: message.video is not None
+            self._handle_video_message, lambda message: message.video is not None
         )
 
         # Documents
         self.dispatcher.message.register(
-            self._handle_document_message,
-            lambda message: message.document is not None
+            self._handle_document_message, lambda message: message.document is not None
         )
 
         # Voice messages
         self.dispatcher.message.register(
-            self._handle_voice_message,
-            lambda message: message.voice is not None
+            self._handle_voice_message, lambda message: message.voice is not None
         )
 
         # Audio files
         self.dispatcher.message.register(
-            self._handle_audio_message,
-            lambda message: message.audio is not None
+            self._handle_audio_message, lambda message: message.audio is not None
         )
 
     def should_process_message(self, chat_id: int) -> bool:
@@ -157,7 +153,7 @@ class TelegramWebhookHandler:
                 chat_id=self.max_target_chat,
                 text=text,
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:
@@ -192,7 +188,7 @@ class TelegramWebhookHandler:
                 photo_url=file_url,
                 caption=caption,
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:
@@ -227,7 +223,7 @@ class TelegramWebhookHandler:
                 video_url=file_url,
                 caption=caption,
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:
@@ -264,7 +260,7 @@ class TelegramWebhookHandler:
                 filename=filename,
                 caption=caption,
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:
@@ -297,7 +293,7 @@ class TelegramWebhookHandler:
                 filename="voice.ogg",
                 caption="🎤 Voice message",
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:
@@ -333,7 +329,7 @@ class TelegramWebhookHandler:
                 filename=filename,
                 caption="🎵 Audio",
                 sender_name=sender_name,
-                sender_username=sender_username
+                sender_username=sender_username,
             )
 
         except Exception as e:

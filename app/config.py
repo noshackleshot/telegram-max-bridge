@@ -2,6 +2,7 @@
 Configuration module for Max to Telegram bridge.
 Loads settings from environment variables.
 """
+
 import os
 from typing import Optional
 
@@ -25,8 +26,12 @@ class Settings(BaseSettings):
     # Telegram webhook settings (for Telegram → Max direction)
     telegram_webhook_url: Optional[str] = os.getenv("TELEGRAM_WEBHOOK_URL")
     telegram_webhook_secret: Optional[str] = os.getenv("TELEGRAM_WEBHOOK_SECRET")
-    telegram_chat_id: Optional[str] = os.getenv("TELEGRAM_CHAT_ID")  # Filter Telegram messages from this chat
-    max_target_chat_id: str = os.getenv("MAX_TARGET_CHAT_ID", "")  # Where to send Telegram messages in Max
+    telegram_chat_id: Optional[str] = os.getenv(
+        "TELEGRAM_CHAT_ID"
+    )  # Filter Telegram messages from this chat
+    max_target_chat_id: str = os.getenv(
+        "MAX_TARGET_CHAT_ID", ""
+    )  # Where to send Telegram messages in Max
 
     # Direction control flags
     enable_max_to_telegram: bool = os.getenv("ENABLE_MAX_TO_TELEGRAM", "true").lower() == "true"

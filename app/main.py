@@ -2,6 +2,7 @@
 Main FastAPI application for Max to Telegram bridge.
 Receives webhooks from GREEN-API and forwards messages to Telegram.
 """
+
 import logging
 import sys
 from contextlib import asynccontextmanager
@@ -21,9 +22,7 @@ from app.telegram_handlers import init_telegram_handler
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper()),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger(__name__)
 
@@ -59,14 +58,16 @@ async def lifespan(app: FastAPI):
                 await telegram_client.bot.set_webhook(
                     url=settings.telegram_webhook_url,
                     secret_token=settings.telegram_webhook_secret,
-                    drop_pending_updates=True
+                    drop_pending_updates=True,
                 )
                 logger.info(f"Telegram webhook registered: {settings.telegram_webhook_url}")
             except Exception as e:
                 logger.error(f"Failed to register Telegram webhook: {e}")
                 logger.warning("Telegram → Max direction may not work without webhook registration")
         else:
-            logger.warning("TELEGRAM_WEBHOOK_URL not set. Telegram → Max will not work until webhook is registered manually.")
+            logger.warning(
+                "TELEGRAM_WEBHOOK_URL not set. Telegram → Max will not work until webhook is registered manually."
+            )
 
     logger.info("Application started successfully")
 
@@ -92,18 +93,14 @@ app = FastAPI(
     title="Max to Telegram Bridge",
     description="Forwards messages from Max messenger to Telegram channel via GREEN-API",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 
 @app.get("/")
 async def root():
     """Health check endpoint."""
-    return {
-        "status": "running",
-        "service": "max-to-telegram-bridge",
-        "version": "1.0.0"
-    }
+    return {"status": "running", "service": "max-to-telegram-bridge", "version": "1.0.0"}
 
 
 @app.get("/health")
@@ -115,18 +112,18 @@ async def health_check():
         "max_configured": bool(settings.max_instance_id and settings.max_api_token),
         "directions": {
             "max_to_telegram": settings.enable_max_to_telegram,
-            "telegram_to_max": settings.enable_telegram_to_max
+            "telegram_to_max": settings.enable_telegram_to_max,
         },
         "max_to_telegram": {
             "enabled": settings.enable_max_to_telegram,
             "channel_id": settings.telegram_channel_id if settings.enable_max_to_telegram else None,
-            "chat_filter": settings.max_chat_id or "all"
+            "chat_filter": settings.max_chat_id or "all",
         },
         "telegram_to_max": {
             "enabled": settings.enable_telegram_to_max,
             "chat_filter": settings.telegram_chat_id or "all",
-            "target_chat": settings.max_target_chat_id if settings.enable_telegram_to_max else None
-        }
+            "target_chat": settings.max_target_chat_id if settings.enable_telegram_to_max else None,
+        },
     }
 
 
@@ -160,7 +157,7 @@ async def webhook_endpoint(request: Request):
             logger.warning("Received Max webhook but Max → Telegram is disabled")
             return JSONResponse(
                 content={"status": "disabled", "message": "Max → Telegram direction is disabled"},
-                status_code=200
+                status_code=200,
             )
 
         # Parse JSON payload
@@ -181,10 +178,7 @@ async def webhook_endpoint(request: Request):
 
     except Exception as e:
         logger.error(f"Error processing webhook: {e}", exc_info=True)
-        return JSONResponse(
-            content={"status": "error", "message": str(e)},
-            status_code=500
-        )
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
 
 
 @app.post("/telegram/webhook")
@@ -209,7 +203,7 @@ async def telegram_webhook_endpoint(request: Request):
             logger.warning("Received Telegram webhook but Telegram → Max is disabled")
             return JSONResponse(
                 content={"status": "disabled", "message": "Telegram → Max direction is disabled"},
-                status_code=200
+                status_code=200,
             )
 
         # Verify secret token if configured
@@ -230,16 +224,12 @@ async def telegram_webhook_endpoint(request: Request):
         else:
             logger.error("Telegram webhook handler not initialized")
             return JSONResponse(
-                content={"status": "error", "message": "Handler not initialized"},
-                status_code=500
+                content={"status": "error", "message": "Handler not initialized"}, status_code=500
             )
 
     except Exception as e:
         logger.error(f"Error processing Telegram webhook: {e}", exc_info=True)
-        return JSONResponse(
-            content={"status": "error", "message": str(e)},
-            status_code=500
-        )
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
 
 
 @app.post("/test")
@@ -256,10 +246,7 @@ async def test_endpoint(request: Request):
 
     except Exception as e:
         logger.error(f"Error in test endpoint: {e}", exc_info=True)
-        return JSONResponse(
-            content={"status": "error", "message": str(e)},
-            status_code=500
-        )
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
 
 
 def main():
@@ -271,7 +258,7 @@ def main():
         host=settings.webhook_host,
         port=settings.webhook_port,
         log_level=settings.log_level.lower(),
-        access_log=True
+        access_log=True,
     )
 
 
