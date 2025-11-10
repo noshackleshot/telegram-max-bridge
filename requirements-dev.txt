@@ -1,0 +1,24 @@
+# Инструменты разработки для Max to Telegram Bridge
+
+# Основные зависимости (для работы с проектом без pip install -e .[dev])
+-r requirements.txt
+
+# Форматирование кода
+black==24.10.0
+
+# Линтинг
+ruff==0.8.4
+
+# Проверка типов
+mypy==1.13.0
+
+# Pre-commit хуки
+pre-commit==4.0.1
+
+# Тестирование
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+
+# HTTP клиент для тестирования
+httpx==0.28.1

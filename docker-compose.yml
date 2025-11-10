@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  max-telegram-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: max-telegram-bridge
+    restart: unless-stopped
+
+    # Environment variables from .env file
+    env_file:
+      - .env
+
+    # Port mapping (internal:external)
+    ports:
+      - "${WEBHOOK_PORT:-8000}:8000"
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Resource limits (optional, adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    # Network configuration
+    networks:
+      - max-bridge-network
+
+networks:
+  max-bridge-network:
+    driver: bridge

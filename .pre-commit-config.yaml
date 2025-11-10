@@ -1,0 +1,88 @@
+# Pre-commit hooks для Max to Telegram Bridge
+# Установка: pre-commit install
+# Ручной запуск: pre-commit run --all-files
+
+repos:
+  # Стандартные хуки для проверки файлов
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: Удаление пробелов в конце строк
+      - id: end-of-file-fixer
+        name: Проверка переноса строки в конце файла
+      - id: check-yaml
+        name: Проверка YAML файлов
+      - id: check-toml
+        name: Проверка TOML файлов
+      - id: check-json
+        name: Проверка JSON файлов
+      - id: check-added-large-files
+        name: Проверка на большие файлы
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+        name: Проверка на маркеры конфликта слияния
+      - id: check-case-conflict
+        name: Проверка на конфликты регистра имён файлов
+      - id: mixed-line-ending
+        name: Проверка смешанных окончаний строк
+        args: ['--fix=lf']
+
+  # Black - форматирование кода
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        name: Black - форматирование Python кода
+        language_version: python3.11
+        args: ['--line-length=100']
+
+  # Ruff - быстрый линтер
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        name: Ruff - линтинг Python кода
+        args: ['--fix', '--exit-non-zero-on-fix']
+      - id: ruff-format
+        name: Ruff - форматирование
+
+  # MyPy - проверка типов
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        name: MyPy - проверка типов
+        additional_dependencies:
+          - types-aiofiles
+          - pydantic>=2.0
+        args: ['--config-file=pyproject.toml']
+        exclude: '^(tests/|docs/)'
+
+  # Проверка безопасности зависимостей
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.3
+    hooks:
+      - id: python-safety-dependencies-check
+        name: Safety - проверка безопасности зависимостей
+        files: requirements.*\.txt$
+
+# Настройки выполнения
+default_language_version:
+  python: python3.11
+
+# Файлы, которые нужно исключить из всех проверок
+exclude: |
+  (?x)^(
+    \.git/|
+    \.venv/|
+    venv/|
+    env/|
+    __pycache__/|
+    \.pytest_cache/|
+    \.mypy_cache/|
+    \.ruff_cache/|
+    build/|
+    dist/|
+    .*\.egg-info/
+  )
