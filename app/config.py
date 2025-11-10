@@ -45,6 +45,22 @@ class Settings(BaseSettings):
 
     def validate_settings(self) -> bool:
         """Validate that all required settings are present."""
+        # Check that both directions are not enabled simultaneously
+        if self.enable_max_to_telegram and self.enable_telegram_to_max:
+            raise ValueError(
+                "Нельзя включить оба направления одновременно. "
+                "Это приведёт к бесконечному дублированию сообщений. "
+                "Выберите одно направление: "
+                "ENABLE_MAX_TO_TELEGRAM=true или ENABLE_TELEGRAM_TO_MAX=true"
+            )
+
+        # Check that at least one direction is enabled
+        if not self.enable_max_to_telegram and not self.enable_telegram_to_max:
+            raise ValueError(
+                "Необходимо включить хотя бы одно направление синхронизации: "
+                "ENABLE_MAX_TO_TELEGRAM=true или ENABLE_TELEGRAM_TO_MAX=true"
+            )
+
         # Basic required settings
         required = [
             self.max_instance_id,

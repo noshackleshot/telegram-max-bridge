@@ -6,14 +6,14 @@
 [![CI](https://github.com/noshackleshot/telegram-max-bridge/workflows/CI/badge.svg)](https://github.com/noshackleshot/telegram-max-bridge/actions)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Двунаправленная синхронизация сообщений между мессенджером Max и Telegram через GREEN-API.
+Синхронизация сообщений между мессенджером Max и Telegram через GREEN-API.
 
 ## Возможности
 
-- **Двунаправленная синхронизация**: Max ↔ Telegram
-- Пересылка текстовых сообщений в обоих направлениях
+- **Гибкая односторонняя синхронизация**: Max → Telegram или Telegram → Max
+- Пересылка текстовых сообщений
 - Поддержка медиа: изображения, видео, документы, аудио
-- Гибкое управление направлениями через флаги в .env
+- Гибкое управление направлением через флаги в .env
 - Фильтрация по конкретным чатам (опционально)
 - Отображение информации об отправителе
 - Контейнеризация через Docker для простого деплоя
@@ -106,9 +106,9 @@ MAX_API_TOKEN=your_api_token
 # Telegram Bot
 TELEGRAM_BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrs
 
-# Управление направлениями синхронизации
+# Управление направлением синхронизации (ТОЛЬКО ОДНО может быть true!)
 ENABLE_MAX_TO_TELEGRAM=true    # Max → Telegram
-ENABLE_TELEGRAM_TO_MAX=true    # Telegram → Max
+ENABLE_TELEGRAM_TO_MAX=false   # Telegram → Max
 
 # === Настройки Max → Telegram ===
 TELEGRAM_CHANNEL_ID=@your_channel  # Куда отправлять сообщения из Max
@@ -129,7 +129,7 @@ LOG_LEVEL=INFO
 
 **Примеры конфигураций:**
 
-1. **Только Max → Telegram** (как раньше):
+1. **Только Max → Telegram** (по умолчанию):
    ```env
    ENABLE_MAX_TO_TELEGRAM=true
    ENABLE_TELEGRAM_TO_MAX=false
@@ -144,14 +144,7 @@ LOG_LEVEL=INFO
    TELEGRAM_WEBHOOK_URL=https://your-domain.com/telegram/webhook
    ```
 
-3. **Двунаправленная синхронизация** (рекомендуется):
-   ```env
-   ENABLE_MAX_TO_TELEGRAM=true
-   ENABLE_TELEGRAM_TO_MAX=true
-   TELEGRAM_CHANNEL_ID=@my_channel
-   MAX_TARGET_CHAT_ID=79991234567@c.us
-   TELEGRAM_WEBHOOK_URL=https://your-domain.com/telegram/webhook
-   ```
+> **⚠️ ВАЖНО:** Нельзя включать оба направления одновременно! Это приведёт к бесконечному дублированию сообщений. Приложение не запустится, если оба флага `ENABLE_MAX_TO_TELEGRAM` и `ENABLE_TELEGRAM_TO_MAX` установлены в `true`.
 
 ### 5. Запуск с Docker
 
