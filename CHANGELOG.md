@@ -13,6 +13,19 @@
 - Поддержка групповых чатов
 - Кэширование медиафайлов
 
+## [1.1.3] - 2025-01-10
+
+### Изменено
+
+- **Смягчены правила линтинга Ruff**
+  - Отключены строгие проверки стиля, не влияющие на функциональность:
+    - `UP007`: разрешено использование `Optional[X]` вместо `X | Y` (Python 3.10+ синтаксис)
+    - `UP006`: разрешено использование `Dict`/`List` из `typing` вместо `dict`/`list`
+    - `UP035`: отключено предупреждение об устаревании `typing.Dict`
+    - `F541`: разрешены f-строки без placeholders
+  - Оставлены важные проверки: порядок импортов (I001), неиспользуемые импорты (F401), неиспользуемые переменные (F841)
+  - CI теперь фокусируется на реальных проблемах кода, а не стилистических предпочтениях
+
 ## [1.1.2] - 2025-01-10
 
 ### Исправлено
@@ -164,7 +177,8 @@ python-dotenv==1.0.1
 - `Исправлено` - исправления багов
 - `Безопасность` - исправления уязвимостей
 
-[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.0.0...v1.1.0
