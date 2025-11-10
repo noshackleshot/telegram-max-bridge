@@ -3,13 +3,14 @@ Telegram client for sending messages to Telegram channel.
 Uses aiogram for async operations.
 """
 import logging
-from typing import Optional
-from aiogram import Bot
-from aiogram.types import FSInputFile
-from aiogram.exceptions import TelegramAPIError
-import aiohttp
-import tempfile
 import os
+import tempfile
+from typing import Optional
+
+import aiohttp
+from aiogram import Bot
+from aiogram.exceptions import TelegramAPIError
+from aiogram.types import FSInputFile
 
 from app.config import settings
 

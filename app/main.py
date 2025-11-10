@@ -5,17 +5,17 @@ Receives webhooks from GREEN-API and forwards messages to Telegram.
 import logging
 import sys
 from contextlib import asynccontextmanager
-from typing import Dict, Any
+from typing import Any, Dict
 
-from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import JSONResponse
 import uvicorn
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 
+import app.telegram_handlers as telegram_handlers
 from app.config import settings
 from app.handlers import webhook_handler
 from app.telegram_client import telegram_client
 from app.telegram_handlers import init_telegram_handler
-import app.telegram_handlers as telegram_handlers
 
 # Configure logging
 logging.basicConfig(

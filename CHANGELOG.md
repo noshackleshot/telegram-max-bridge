@@ -13,6 +13,25 @@
 - Поддержка групповых чатов
 - Кэширование медиафайлов
 
+## [1.1.2] - 2025-01-10
+
+### Исправлено
+
+- **Исправлены ошибки CI/CD**
+  - Исправлен порядок импортов в `app/telegram_client.py` (Ruff I001 violation)
+  - Исправлен порядок импортов в `app/main.py` (Ruff I001 violation)
+  - Исправлен порядок импортов в `app/config.py` (добавлен пустой разделитель между stdlib и third-party)
+  - Исправлена структура Docker build: `COPY app/ /app/` вместо `COPY app/ /app/app/`
+  - Теперь CI проходит все проверки: линтинг, форматирование, Docker сборка
+
+### Техническое
+
+- Все импорты теперь следуют правилам isort:
+  - Сначала stdlib (в алфавитном порядке)
+  - Затем third-party пакеты (в алфавитном порядке)
+  - Затем local imports (в алфавитном порядке)
+  - Пустая строка между группами
+
 ## [1.1.1] - 2025-01-10
 
 ### Исправлено
@@ -144,7 +163,8 @@ python-dotenv==1.0.1
 - `Исправлено` - исправления багов
 - `Безопасность` - исправления уязвимостей
 
-[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/noshackleshot/telegram-max-bridge/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/noshackleshot/telegram-max-bridge/releases/tag/v1.0.0

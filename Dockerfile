@@ -28,7 +28,7 @@ RUN useradd -m -u 1000 appuser && \
 COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application code
-COPY --chown=appuser:appuser app/ /app/app/
+COPY --chown=appuser:appuser app/ /app/
 
 # Switch to non-root user
 USER appuser
